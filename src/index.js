@@ -9,7 +9,7 @@ const routes = {
 }
 
 
-const server = http.createServer((req, res) => {
+http.createServer((req, res) => {
     const route = routes[req.url]
 
 

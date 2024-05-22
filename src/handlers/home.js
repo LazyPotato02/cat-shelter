@@ -1,4 +1,4 @@
-const {readFile} = require("../util");
+const {readFile, readTemplate} = require("../util");
 
 const cats = require('../../data/cats.json')
 
@@ -17,8 +17,8 @@ function catFragment(cat){
 `
 }
 
-function homeHandler(req,res) {
-    const template = readFile('./views/home/index.html')
+async function homeHandler(req,res) {
+    const template = await readTemplate('home/index')
     const html = template.replace('%%catContent%%', cats.map(catFragment).join('\n'))
     res.writeHead(200, [
         'Content-Type', 'text/html'
