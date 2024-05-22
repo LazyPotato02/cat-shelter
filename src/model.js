@@ -26,6 +26,12 @@ async function addBreed(breed){
     await writeData(data)
 }
 
+async function addCats(cat){
+    const data = await readData()
+    console.log(cat)
+    data.cats.push(cat)
+}
+
 
 module.exports = {
     getCats,

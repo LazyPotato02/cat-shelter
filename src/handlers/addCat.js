@@ -1,5 +1,5 @@
 const {readFile, readTemplate, layout} = require("../util");
-const {getBreeds} = require("../model");
+const {getBreeds, addBreed} = require("../model");
 
 function breedFragment(breed){
     return `<option value="${breed}">${breed}</option>`
@@ -17,6 +17,13 @@ async function addCatHandler(req, res) {
     res.end()
 }
 
+
+
+async function postCatHandler(req,res){
+    console.log(true)
+}
+
 module.exports = {
-    addCatHandler
+    addCatHandler,
+    postCatHandler
 }
