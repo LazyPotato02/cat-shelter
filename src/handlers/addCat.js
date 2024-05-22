@@ -1,8 +1,9 @@
 const {readFile, readTemplate, layout} = require("../util");
-const {getBreeds, addBreed} = require("../model");
-
+const {getBreeds, addBreed,addCats} = require("../model");
+const formidable = require('formidable');
+const {json} = require("formidable");
 function breedFragment(breed){
-    return `<option value="${breed}">${breed}</option>`
+    return `<option name='breed' value="${breed}">${breed}</option>`
 }
 
 async function addCatHandler(req, res) {
@@ -20,7 +21,50 @@ async function addCatHandler(req, res) {
 
 
 async function postCatHandler(req,res){
-    console.log(true)
+    let form = new formidable.IncomingForm();
+
+    form.parse(req, (err, fields, files) => {
+        // Construct cat data object
+        const catData = {
+            name: String(fields.name),
+            breed: String(fields.breed),
+            description: String(fields.description),
+            imageUrl: []
+        };
+
+        // Process file uploads
+        if (files.upload && files.upload.length > 0) {
+            for (const file of files.upload) {
+                const fileDetails = {
+                    filepath: file.path,
+                    size: file.size,
+                    mimetype: file.type,
+                    originalFilename: file.name
+                };
+                catData.imageUrl.push(fileDetails);
+            }
+        }
+
+        // Convert catData to JSON string
+        const jsonData = JSON.stringify(catData);
+        if (jsonData){
+            addCats(jsonData)
+
+            res.writeHead(301,[
+                'Location','/'
+            ])
+            res.end()
+
+        }else{
+
+            res.writeHead(301,[
+                'Location','/cats/add-cat'
+            ])
+            res.end()
+        }
+    })
+
+
 }
 
 module.exports = {
